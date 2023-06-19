@@ -26,6 +26,7 @@ func main() {
     r.POST("/login", controllers.Login)
     r.GET("/validate", middleware.RequireAuth, controllers.Validate)
     r.GET("/logout", middleware.RequireAuth, controllers.Logout)
+    r.GET("/users", controllers.GetAllUsersWithPagination)
     r.Run() // listen and serve on
 }
 

@@ -1,0 +1,160 @@
+{
+  "info": {
+    "_postman_id": "9960be45-b2e6-4ab2-b881-c58b5cf70b0e",
+    "name": "Golang-Book-App",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "15544476",
+    "_collection_link": "https://lunar-shuttle-830387.postman.co/workspace/My-Workspace~5f5aa68b-3004-49aa-891f-2b4eef2fecf8/collection/15544476-9960be45-b2e6-4ab2-b881-c58b5cf70b0e?action=share&creator=15544476&source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Signup",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\":\"f@b.c\",\r\n    \"password\":\"2323\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:4545/signup",
+          "host": ["localhost"],
+          "port": "4545",
+          "path": ["signup"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\":\"a@b.c\",\r\n    \"password\":\"2323\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:4545/login",
+          "host": ["localhost"],
+          "port": "4545",
+          "path": ["login"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Validate",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:4545/validate",
+          "host": ["localhost"],
+          "port": "4545",
+          "path": ["validate"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Logout",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InlvZG1pQGdtYWlsLmNvbSIsImlhdCI6MTY4NjEyNTk1Nn0.f-yxmsbIPEMq3O3HNmQIhkpwUtTpkOYBSaRmiHgA7LU",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"shaka updated\",\r\n    \"author\": \"abayomi\",\r\n    \"publication\": \"dfdf\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "localhost:4545/logout",
+          "host": ["localhost"],
+          "port": "4545",
+          "path": ["logout"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Book",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "localhost:4545/ping",
+          "host": ["localhost"],
+          "port": "4545",
+          "path": ["ping"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "All users",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "localhost:4545/users?pageSize=3&page=2",
+          "host": ["localhost"],
+          "port": "4545",
+          "path": ["users"],
+          "query": [
+            {
+              "key": "pageSize",
+              "value": "3"
+            },
+            {
+              "key": "page",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

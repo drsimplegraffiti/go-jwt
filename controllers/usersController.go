@@ -5,6 +5,8 @@ import (
 	"os"
 	"time"
 
+	"strconv"
+
 	"github.com/drsimplegraffiti/gojwt/initializers"
 	"github.com/drsimplegraffiti/gojwt/models"
 	"github.com/gin-gonic/gin"
@@ -133,3 +135,37 @@ func Validate(c *gin.Context){
 	c.JSON(http.StatusOK, gin.H{"user": user, "dbUser": dbUser})
 }
 
+
+func GetAllUsersWithPagination(c *gin.Context) {
+	var users []models.User
+	var count int64
+
+	// Get the page and page size from the query parameters
+	page, _ := strconv.Atoi(c.Query("page"))
+	if page <= 0 {
+		page = 1
+	}
+
+	pageSize, _ := strconv.Atoi(c.Query("pageSize"))
+	if pageSize <= 0 {
+		pageSize = 10
+	}
+
+	// Calculate the offset and limit
+	offset := (page - 1) * pageSize
+	limit := pageSize
+
+	// Get the total count of users
+	if err := initializers.DB.Model(&models.User{}).Count(&count).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get total user count"})
+		return
+	}
+
+	// Get the users with pagination
+	if err := initializers.DB.Offset(offset).Limit(limit).Find(&users).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get users"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"users": users, "count": count, "page": page, "pageSize": pageSize})
+}
