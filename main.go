@@ -1,9 +1,8 @@
 package main
 
 import (
-	"github.com/drsimplegraffiti/gojwt/controllers"
 	"github.com/drsimplegraffiti/gojwt/initializers"
-	"github.com/drsimplegraffiti/gojwt/middleware"
+	"github.com/drsimplegraffiti/gojwt/routes"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,17 +15,7 @@ func init() {
 
 func main() {
     r := gin.Default()
-    r.GET("/ping", func(c *gin.Context) {
-        c.JSON(200, gin.H{
-            "message": "pong 😁😁😁😁😁😁",
-        })
-    })
-
-    r.POST("/signup", controllers.Signup)
-    r.POST("/login", controllers.Login)
-    r.GET("/validate", middleware.RequireAuth, controllers.Validate)
-    r.GET("/logout", middleware.RequireAuth, controllers.Logout)
-    r.GET("/users", controllers.GetAllUsersWithPagination)
+        routes.SetupRoutes(r)
     r.Run() // listen and serve on
 }
 
