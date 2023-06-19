@@ -17,7 +17,7 @@ go get -u github.com/joho/godotenv
 go get -u github.com/golang-jwt/jwt/v4
 go get github.com/githubnemo/CompileDaemon
 go install github.com/githubnemo/CompileDaemon@latest
-export PATH="$PATH:$GOBIN"
+export PATH="$PATH:$GOPATH/bin"
 
 ```
 
