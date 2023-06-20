@@ -20,4 +20,5 @@ func SetupRoutes(r *gin.Engine) {
     r.GET("/logout", middleware.RequireAuth, controllers.Logout)
     r.GET("/users", controllers.GetAllUsersWithPagination)
     r.GET("/users/:id", controllers.GetUserById)
+    r.PUT("/user/profile", middleware.RequireAuth, controllers.UpdateUserProfilePicture)
 }

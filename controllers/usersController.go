@@ -1,8 +1,10 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"strconv"
@@ -81,15 +83,15 @@ if err != nil {
 
 
 func Login(c *gin.Context){
-	var body struct{
-		Email string
-		Password string
-	}
-	if c.Bind(&body) != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Fields are empty"})
-		return
+	var body struct {
+	Email    string `form:"email" binding:"required,email"`
+	Password string `form:"password" binding:"required,min=8"`
 }
 
+if err := c.ShouldBind(&body); err != nil {
+	c.JSON(http.StatusBadRequest, gin.H{"error": strings.Split(err.Error(), "\n")[0]})
+	return
+}
 //check if user exists
 var user models.User
 initializers.DB.First(&user, "email = ?", body.Email)
@@ -201,4 +203,47 @@ func GetUserById(c *gin.Context) {
 	id := c.Param("id")
 	initializers.DB.First(&user, id)
 	c.JSON(http.StatusOK, gin.H{"user": user})
+}
+
+func UpdateUserProfilePicture(c *gin.Context) {
+	//get the user
+	user, _ := c.Get("user")
+
+	// Ensure the user value is of type jwt.MapClaims
+	claims, ok := user.(jwt.MapClaims)
+	if !ok {
+		// Handle the error condition where the user value is not of the expected type
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid user"})
+		return
+	}
+
+	// Get the id from the user
+	id := claims["id"].(float64)
+
+	// Get the user from the database
+	var dbUser models.User
+	initializers.DB.First(&dbUser, int(id))
+
+	//upload file
+	file, err := c.FormFile("file")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Error uploading file"})
+		return
+	}
+
+	//generate random file name
+	fileName := fmt.Sprintf("%d%s", time.Now().Unix(), file.Filename)
+
+	//save file to disk
+	if err := c.SaveUploadedFile(file, "./uploads/"+fileName); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Error saving file"})
+		return
+	}
+
+	//update user profile picture
+	dbUser.ProfilePicture = fileName
+	initializers.DB.Save(&dbUser)
+
+	c.JSON(http.StatusOK, gin.H{"message": "Profile picture updated successfully", "user": dbUser})
+	
 }

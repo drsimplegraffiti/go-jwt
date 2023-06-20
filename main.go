@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/drsimplegraffiti/gojwt/initializers"
 	"github.com/drsimplegraffiti/gojwt/routes"
 	"github.com/gin-gonic/gin"
@@ -14,9 +17,11 @@ func init() {
 }
 
 func main() {
+    gin.ForceConsoleColor()
     r := gin.Default()
+    fmt.Println("Server started on port " + os.Getenv("PORT") + "...")
     routes.SetupRoutes(r)
-    r.Run() // listen and serve on
+    r.Run(":" + os.Getenv("PORT"))
 }
 
 
