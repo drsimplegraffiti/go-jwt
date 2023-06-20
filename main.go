@@ -15,7 +15,7 @@ func init() {
 
 func main() {
     r := gin.Default()
-        routes.SetupRoutes(r)
+    routes.SetupRoutes(r)
     r.Run() // listen and serve on
 }
 

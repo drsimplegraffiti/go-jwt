@@ -9,6 +9,7 @@ import (
 
 	"github.com/drsimplegraffiti/gojwt/initializers"
 	"github.com/drsimplegraffiti/gojwt/models"
+	"github.com/drsimplegraffiti/gojwt/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
@@ -50,7 +51,31 @@ if result.Error != nil {
 	return
 }
 
-c.JSON(http.StatusCreated, gin.H{"message": "User created successfully"})
+// send email
+token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+	"id": user.ID,
+	"email": user.Email,
+	"iat": time.Now().Unix(), // issued at
+	"exp": time.Now().Add(time.Hour * 24).Unix(),
+})
+tokenString, err := token.SignedString([]byte(os.Getenv("SECRET")))
+if err != nil {
+	c.JSON(http.StatusBadRequest, gin.H{"error": "Error generating token"})
+	return
+}
+// Create the data map for the email template
+	data := map[string]interface{}{
+		"Email": user.Email,
+		"Token": tokenString,
+	}
+
+	err = utils.SendEmail("./templates/signup.html", data, user.Email, "Verify your email")
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Error sending email" + err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusCreated, gin.H{"message": "User created successfully", "token": tokenString})
 
 }
 
