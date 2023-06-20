@@ -15,8 +15,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func Signup(c *gin.Context){
-	var body struct{
+func Signup(c *gin.Context){ // c is gin's context, which is a wrapper around http.Request and http.ResponseWriter
+	var body struct{ // we didnt use type User struct because we dont want to expose the password
 		Email string
 		Password string
 	}
@@ -193,4 +193,12 @@ func GetAllUsersWithPagination(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"users": users, "count": count, "page": page, "pageSize": pageSize})
+}
+
+
+func GetUserById(c *gin.Context) {
+	var user models.User
+	id := c.Param("id")
+	initializers.DB.First(&user, id)
+	c.JSON(http.StatusOK, gin.H{"user": user})
 }

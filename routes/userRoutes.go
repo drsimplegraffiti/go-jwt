@@ -19,4 +19,5 @@ func SetupRoutes(r *gin.Engine) {
     r.GET("/validate", middleware.RequireAuth, controllers.Validate)
     r.GET("/logout", middleware.RequireAuth, controllers.Logout)
     r.GET("/users", controllers.GetAllUsersWithPagination)
+    r.GET("/users/:id", controllers.GetUserById)
 }
